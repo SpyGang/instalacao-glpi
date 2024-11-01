@@ -75,13 +75,16 @@ sudo sed -i 's/^;date.timezone =/date.timezone = America\/Sao_Paulo/' /etc/php/8
 
 2.9. Criar o arquivo /etc/nginx/nginx.conf com o seguinte conteúdo (sobrescrever se existente):  
 ```
+sudo bash -c 'cat > /etc/nginx/nginx.conf <<EOF
 user www-data;
 worker_processes auto;
 pid /run/nginx.pid;
 include /etc/nginx/modules-enabled/*.conf;
+
 events {
         worker_connections 768;
 }
+
 http {
         sendfile on;
         tcp_nopush on;
@@ -98,16 +101,18 @@ http {
             root /var/www/glpi/public;
             index index.php;
             location / {
-                try_files $uri /index.php$is_args$args;
+                try_files \$uri /index.php\$is_args\$args;
             }
-            location ~ ^/index\.php$ {
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            location ~ ^/index\\.php\$ {
+                fastcgi_split_path_info ^(.+\\.php)(/.+)\$;
                 fastcgi_pass unix:/run/php/php8.1-fpm.sock;
                 fastcgi_index index.php;
                 include /etc/nginx/fastcgi.conf;
             }
         }
 }
+EOF'
+
 ```
 
 
@@ -172,18 +177,24 @@ sudo chown -R www-data:www-data /var/log/glpi
 
 3.3. Criar o arquivo /var/www/glpi/inc/downstream.php com o seguinte conteúdo:  
 ```
+sudo bash -c 'cat > /var/www/glpi/inc/downstream.php <<EOF
 <?php
-define('GLPI_CONFIG_DIR', '/etc/glpi/');
-if (file_exists(GLPI_CONFIG_DIR . '/local_define.php')) {
-   require_once GLPI_CONFIG_DIR . '/local_define.php';
+define("GLPI_CONFIG_DIR", "/etc/glpi/");
+if (file_exists(GLPI_CONFIG_DIR . "/local_define.php")) {
+   require_once GLPI_CONFIG_DIR . "/local_define.php";
 }
+EOF'
+
 ```
 
 3.4. Criar o Arquivo /etc/glpi/local_define.php com o seguinte conteúdo:  
 ```
+sudo bash -c 'cat > /etc/glpi/local_define.php <<EOF
 <?php
-define('GLPI_VAR_DIR', '/var/lib/glpi');
-define('GLPI_LOG_DIR', '/var/log/glpi');
+define("GLPI_VAR_DIR", "/var/lib/glpi");
+define("GLPI_LOG_DIR", "/var/log/glpi");
+EOF'
+
 ```
 
 
