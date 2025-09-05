@@ -124,7 +124,7 @@ sudo systemctl restart nginx php8.1-fpm mysql
 
 2.13. Download do glpi  
 ```
-wget https://github.com/glpi-project/glpi/releases/download/10.0.15/glpi-10.0.15.tgz
+wget https://github.com/glpi-project/glpi/releases/download/10.0.19/glpi-10.0.19.tgz
 ```
 
 2.14. Descompactar a pasta do GLPI  
